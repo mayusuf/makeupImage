@@ -15,7 +15,7 @@ class mainWindow(tk.Frame):
         file_menu = tk.Menu(menu,tearoff = 0)
         file_menu.add_command(label="Open", command = self.openFile)
         file_menu.add_command(label="Save", command = self.saveLabel)
-        file_menu.add_command(label="Exit", command = lambda:exit())
+        file_menu.add_command(label="Exit", command = self.onExit)
         
         
         menu.add_cascade(label="File", menu=file_menu)
@@ -45,14 +45,20 @@ class mainWindow(tk.Frame):
         if self.image is not None: # if an image was already loaded
             self.canvas.delete(self.image) # remove the previous image
 
+        #if self.i:
+         #   self.canvas.delete(slef.i) # remove the previous image
+            
         self.image = self.canvas.create_image((w / 2, h / 2), image = self.render)
-                
+        
         root.geometry("%dx%d" % (w, h))
         
         self.canvas.bind("<ButtonPress-1>", self.drawFirstCorner)
         self.canvas.bind("<B1-Motion>", self.drawRectangle)
         self.canvas.bind("<ButtonRelease-1>", self.drawLastCorner)
-        
+    
+    def onExit(self):
+        self.canvas.delete("all")
+        self.quit()
         
     def drawFirstCorner(self,event):
     
@@ -72,14 +78,21 @@ class mainWindow(tk.Frame):
         ix = event.x
         iy = event.y
         print(event, "event")
+        
         print("{} and {}".format(ix,iy))
-        self.canvas.create_rectangle(self.spt_x, self.spt_y, ix, iy, outline="#D0FFC0", fill='#D0FFC0')
+        i = self.canvas.create_rectangle(self.spt_x, self.spt_y, ix, iy, outline="#D0FFC0", fill='')
+        print(i)
+        if(i>1):
+            j = i-1
+            print(j)
+            self.canvas.delete(j) # remove        
+       
             
     def drawLastCorner(self,event):
         
         print(event, "event")
         print("{} and {}".format(event.x,event.y))
-        self.canvas.create_rectangle(self.spt_x, self.spt_y, event.x, event.y, outline="#D0FFC0", fill='#D0FFC0')    
+        self.canvas.create_rectangle(self.spt_x, self.spt_y, event.x, event.y, outline="#D0FFC0", fill='')    
         self.lpt_x = event.x
         self.lpt_y = event.y
         
