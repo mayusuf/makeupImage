@@ -92,7 +92,11 @@ class mainWindow(tk.Frame):
         
         print(event, "event")
         print("{} and {}".format(event.x,event.y))
-        self.canvas.create_rectangle(self.spt_x, self.spt_y, event.x, event.y, outline="#D0FFC0", fill='')    
+        self.canvas.create_rectangle(self.spt_x, self.spt_y, event.x, event.y, outline="#D0FFC0", fill='')  
+        
+        self.entry1 = tk.Entry (root) 
+        self.canvas.create_window(200, 140, window=self.entry1)
+        
         self.lpt_x = event.x
         self.lpt_y = event.y
         
@@ -110,9 +114,22 @@ class mainWindow(tk.Frame):
         dirpath = os.path.dirname(os.path.realpath(self.imagepath))
         print(dirpath)
         
-        f = open('data.json',"w+")   
-        f.write("This is line")
-        f.close()
+        print(self.entry1.get())
+        
+        fileString = {"image_name": basefile,
+        "shape":"bbox",
+        "cord":[self.spt_x, self.spt_y, self.lpt_x, self.lpt_y],
+        "label":self.entry1.get()
+        }
+        
+        fileName = filestem+".json"
+        
+        #f = open(fileName,"w+")   
+        #f.write(fileString)
+        #f.close()
+        
+        with open(fileName, 'w') as outfile:
+            json.dump(fileString, outfile, sort_keys = True, indent = 4,ensure_ascii = False)
 
 root = tk.Tk()
 root.geometry("%dx%d" % (600, 600))
